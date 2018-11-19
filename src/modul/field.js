@@ -1,22 +1,26 @@
+import {Util} from "./Util"
+
 export class Field {
     constructor() {
         this.canvas = document.getElementById("myCanvas");
         this.ctx = this.canvas.getContext("2d");
         this.x0 = 0;
         this.y0 = 0;
-        this.cellSize = 30;
+        this.cellSize = Util.cellSize;
         this.Field = this.createField();
     }
 
     getColumns() {
-        return Math.trunc(this.canvas.clientWidth / this.cellSize);
+        return Util.getCellsCount(this.canvas.clientWidth);
+    
     }
 
     getRows() {
-        return Math.trunc(this.canvas.clientHeight / this.cellSize);
+        return Util.getCellsCount(this.canvas.clientHeight);
     }
 
     createField() {
+        console.log(this.getColumns());
         let field = new Array(this.getColumns());
         for (let i = 0; i < this.getColumns(); i++) {
             field[i] = new Array(this.getRows());
