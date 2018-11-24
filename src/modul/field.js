@@ -1,4 +1,5 @@
 import {Util} from "./Util"
+import {ObjectsField} from "./ObjectsField"
 
 export class Field {
     constructor() {
@@ -8,6 +9,23 @@ export class Field {
         this.y0 = 0;
         this.cellSize = Util.cellSize;
         this.Field = this.createField();
+        this.objects = [];
+
+    }
+     
+    addObject(obj){
+        this.objects.push(obj);
+    }
+
+    renderObjects(){
+        this.objects.forEach(function(obj){
+            obj.x;
+            obj.y;
+            if 
+            this.ctx.fillStyle = "#8B0000";
+            this.ctx.fillRect(x,y,this.cellSize,this.cellSize);
+            this.ctx.stroke();
+        })
     }
 
     getColumns() {
@@ -25,7 +43,7 @@ export class Field {
         for (let i = 0; i < this.getColumns(); i++) {
             field[i] = new Array(this.getRows());
             for (let j = 0; j < this.getRows(); j++) {
-                if (i == 0 || j == 0 || i == (this.getColumns() - 1) || j == (this.getRows() - 1)) { field[i][j] = 1; }
+                if (i == 0 || j  == 0 || i == (this.getColumns() - 1) || j == (this.getRows() - 1)) { field[i][j] = 1; }
                 else { field[i][j] = 0; };
             };
 

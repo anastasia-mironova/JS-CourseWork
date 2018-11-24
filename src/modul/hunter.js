@@ -1,10 +1,12 @@
 import {Util} from "./Util"
-export class Hunter{
-    constructor(){
-        this.cellSize = Util.cellSize;
-        this.x0 = Util.cellSize;
-        this.y0 = Util.cellSize;
+import {ObjectsField} from "./ObjectsField"
 
+export class Hunter extends ObjectsField{
+    constructor(){
+        super(Util.cellSize, Util.cellSize, "hunter");
+        this.cellSize = Util.cellSize;
+         
+        
         this.canvas = document.getElementById("myCanvas");
         this.ctx = this.canvas.getContext("2d");
     }

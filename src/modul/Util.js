@@ -3,7 +3,7 @@ export class Util{
     //     return 30;
     // } 
    static get cellSize(){
-        return 30;
+        return 90;
     }
     static getCellsCount(size){
         return Math.trunc(size / Util.cellSize);
