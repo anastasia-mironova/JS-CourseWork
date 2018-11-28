@@ -1,14 +1,28 @@
 import {Field} from "./modul/field"
 import {Hunter} from "./modul/hunter"
-
-let kek = new Field();
+// const level = [[1, 1, 1, 1, 1, 1],
+//               [1, 0, "h", 0, 0, 1],
+//               [1, 0, 0, 0, 0, 1],
+//               [1, "t", 0, 0, 0, 1],
+//               [1, 0, 0, 0, 0, 1],
+//               [1, 0, 0, 0, 0, 1],
+//               [1, 0, 0, 0, "t", 1],
+//               [1, 1, 1, 1, 1, 1]];
+const level = [["w", "w", "w", "w", "w", "w", "w", "w"],
+              ["w", "h", "0", "0", "0", "0", "0", "w"],
+              ["w", "w", "0", "0", "0", "0", "0", "w"],
+              ["w", "0", "0", "w", "w", "w", "w", "w"],
+              ["w", "0", "0", "w", "t", "0", "0", "w"],
+              ["w", "w", "0", "w", "w", "w", "0", "w"],
+              ["w", "t", "0", "0", "0" ,"0", "0", "w"],
+              ["w", "w", "w", "w", "w", "w", "w", "w"]];
+let kek = new Field(level);
 kek.renderField();
-let lol = new Hunter();
-kek.addObject(lol);
-console.log(kek.objects);
-let i = 90;
-let timer = setInterval(function(){
-    kek.renderField()
-    lol.renderHunter(i,90);
-   i += 90;
-},2000)
+addEventListener("keydown",kek.hunterController);
+
+function update(){
+    kek.renderField();
+    
+}
+
+// setInterval(update,1000)

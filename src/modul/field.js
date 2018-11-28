@@ -1,82 +1,227 @@
-import {Util} from "./Util"
-import {ObjectsField} from "./ObjectsField"
+import { Hunter } from "./Hunter"
+import { throws } from "assert";
+import data from './data';
+
+const fieldObjects = data.fieldObjects;
+const direction = data.direction;
+
+console.log("lol:", fieldObjects);
 
 export class Field {
-    constructor() {
-        this.canvas = document.getElementById("myCanvas");
-        this.ctx = this.canvas.getContext("2d");
+    constructor(level) {
         this.x0 = 0;
         this.y0 = 0;
-        this.cellSize = Util.cellSize;
-        this.Field = this.createField();
-        this.objects = [];
 
-    }
-     
-    addObject(obj){
-        this.objects.push(obj);
-    }
+        this.rows = level.length;
+        this.cols = level[0].length;
 
-    renderObjects(){
-        this.objects.forEach(function(obj){
-            obj.x;
-            obj.y;
-            if 
-            this.ctx.fillStyle = "#8B0000";
-            this.ctx.fillRect(x,y,this.cellSize,this.cellSize);
-            this.ctx.stroke();
-        })
+        this.ctx = this.setupCanvas("myCanvas", "2d");
+
+        console.log("level:", level);
+        console.log("#", this.rows, this.cols);
+
+        this.level = level;
+        this.setHunter();
+        console.log("hunter1:", this.hunter);
+        this.hunterController = this.hunterController.bind(this);
+
+        this.counter = 0;
     }
 
-    getColumns() {
-        return Util.getCellsCount(this.canvas.clientWidth);
-    
-    }
+    setupCanvas(id, context) {
+        let canvas = document.getElementById(id);
+        let ctx = canvas.getContext(context);
 
-    getRows() {
-        return Util.getCellsCount(this.canvas.clientHeight);
-    }
+        const levelRatio = this.cols / this.rows;
+        const windowRatio = window.innerWidth / window.innerHeight;
 
-    createField() {
-        console.log(this.getColumns());
-        let field = new Array(this.getColumns());
-        for (let i = 0; i < this.getColumns(); i++) {
-            field[i] = new Array(this.getRows());
-            for (let j = 0; j < this.getRows(); j++) {
-                if (i == 0 || j  == 0 || i == (this.getColumns() - 1) || j == (this.getRows() - 1)) { field[i][j] = 1; }
-                else { field[i][j] = 0; };
-            };
+        // По высоте
+        if (windowRatio > levelRatio) {
+            ctx.canvas.height = window.innerHeight;
+            ctx.canvas.width = ctx.canvas.height * levelRatio;
+            // По ширине
+        } else {
+            ctx.canvas.width = window.innerWidth;
+            ctx.canvas.height = ctx.canvas.width / levelRatio;
+        }
 
-        };
+        if (this.cols > this.rows) {
+            this.cellSize = Math.round(ctx.canvas.width / this.cols);
+        } else {
+            this.cellSize = Math.round(ctx.canvas.height / this.rows);
+        }
 
-        return field;
+        return ctx;
     }
 
     renderField() {
-        let x = this.x0;
-        let y = this.y0;
 
-        for (let i = 0; i < this.getColumns() + 1; i++) {
-            this.ctx.moveTo(x, this.y0);
-            this.ctx.lineTo(x, this.canvas.clientHeight - 1);
-            x += this.cellSize;
+
+
+        for (let col = 0; col < this.cols; col++) {
+            this.ctx.moveTo(col * this.cellSize, this.y0);
+            this.ctx.lineTo(col * this.cellSize, this.ctx.canvas.height - 1);
 
         }
-        for (let i = 0; i < this.getRows() + 1; i++) {
-            this.ctx.moveTo(this.x0, y);
-            this.ctx.lineTo(this.canvas.clientWidth - 1, y);
-            y += this.cellSize;
+        for (let row = 0; row < this.rows; row++) {
+            this.ctx.moveTo(this.x0, row * this.cellSize);
+            this.ctx.lineTo(this.ctx.canvas.width - 1, row * this.cellSize);
+
         }
+
+
 
         this.ctx.strokeStyle = "#A9A9A9";
-        this.ctx.fillStyle = "#C0C0C0";
-        this.ctx.fillRect(this.x0, this.y0, this.canvas.clientWidth, this.canvas.clientHeight);
-        this.ctx.clearRect(this.cellSize, this.cellSize, this.canvas.clientWidth - 2 * this.cellSize, this.canvas.clientHeight - 2 * this.cellSize);
+
+        this.level.forEach((row, rowIndex) => {
+            row.forEach((item, colIndex) => {
+
+
+                if (fieldObjects[item]) {
+                    this.ctx.fillStyle = fieldObjects[item].color;
+                } else {
+                    this.ctx.fillStyle = "#F0F8FF";
+                }
+
+                this.ctx.fillRect(colIndex * this.cellSize, rowIndex * this.cellSize, this.cellSize, this.cellSize);
+            });
+
+        });
+
+
         this.ctx.stroke();
     }
 
-    printArr() {
-        console.log(this.Field);
+    setHunter() {
+        this.level.forEach((row, rowIndex) => {
+            row.forEach((item, colIndex) => {
+                if (this.level[rowIndex][colIndex] == "h") {
+                    console.log("j:", colIndex, "i:", rowIndex);
+                    this.hunter = new Hunter(colIndex, rowIndex);
+                }
+            });
+
+        });
+    }
+
+    forwardTo(x, y, dir) {
+        const dirX = direction[dir].x;
+        const dirY = direction[dir].y;
+
+        console.log("x:", dirX, "y:", dirY);
+
+        if (this.level[y + dirY][x+dirX] == "w") {
+            console.log("ты пидор");
+            alert("You died");
+            this.level[y][x] = "h";
+        };
+        if (this.level[y + dirY][x+dirX] == "0" || this.level[y + dirY][x+dirX] == "t") {
+            if (this.level[y + dirY][x+dirX] == "t") {
+                this.counter++;
+                console.log("counter: ", this.counter);
+            };
+            this.level[y][x] = "0";
+
+            this.hunter.x = x + dirX;
+            this.hunter.y = y + dirY;
+            
+            this.level[this.hunter.y][this.hunter.x] = "h";
+        };
+    }
+
+    hunterController(e) {
+        // this.forwardTo(1, 1, "up");
+        const self = this;
+
+        switch (e.keyCode) {
+            //up
+            case 38:
+                console.log("hunter:", self.hunter);
+
+
+                // if (this.level[this.hunter.y - 1][this.hunter.x] == "w") {
+                //     console.log("ты пидор");
+                //     alert("You died");
+                //     this.level[this.hunter.y][this.hunter.x] = "h";
+                // };
+                // if (this.level[this.hunter.y - 1][this.hunter.x] == "0" || this.level[this.hunter.y - 1][this.hunter.x] == "t") {
+                //     if (this.level[this.hunter.y - 1][this.hunter.x] == "t") {
+                //         this.counter++;
+                //         console.log("counter: ", this.counter);
+                //     };
+                //     this.level[this.hunter.y][this.hunter.x] = "0";
+                //     this.hunter.y = this.hunter.y - 1;
+                //     this.level[this.hunter.y][this.hunter.x] = "h";
+                // };
+                this.forwardTo(this.hunter.x, this.hunter.y, "up");
+                break;
+            //down
+            case 40:
+                console.log("hunter:", self.hunter);
+
+
+                // if (this.level[this.hunter.y + 1][this.hunter.x] == "w") {
+                //     console.log("ты пидор");
+                //     alert("You died");
+                //     this.level[this.hunter.y][this.hunter.x] = "h";
+                // };
+                // if (this.level[this.hunter.y + 1][this.hunter.x] == "0" || this.level[this.hunter.y + 1][this.hunter.x] == "t") {
+                //     if (this.level[this.hunter.y + 1][this.hunter.x] == "t") {
+                //         this.counter++;
+                //         console.log("counter: ", this.counter);
+                //     };
+                //     this.level[this.hunter.y][this.hunter.x] = "0";
+                //     this.hunter.y = this.hunter.y + 1;
+                //     this.level[this.hunter.y][this.hunter.x] = "h";
+                // };
+                this.forwardTo(this.hunter.x, this.hunter.y, "down");
+                break;
+            //left
+            case 37:
+                console.log("hunter:", self.hunter);
+
+
+                // if (this.level[this.hunter.y][this.hunter.x - 1] == "w") {
+                //     console.log("ты пидор");
+                //     alert("You died");
+                //     this.level[this.hunter.y][this.hunter.x] = "h";
+                // };
+                // if (this.level[this.hunter.y][this.hunter.x - 1] == "0" || this.level[this.hunter.y][this.hunter.x - 1] == "t") {
+                //     if (this.level[this.hunter.y][this.hunter.x - 1] == "t") {
+                //         this.counter++;
+                //         console.log("counter: ", this.counter);
+                //     };
+                //     this.level[this.hunter.y][this.hunter.x] = "0";
+                //     this.hunter.x = this.hunter.x - 1;
+                //     this.level[this.hunter.y][this.hunter.x] = "h";
+                // };
+                this.forwardTo(this.hunter.x, this.hunter.y, "left");
+
+                break;
+            //right
+            case 39:
+                console.log("hunter:", self.hunter);
+
+
+                // if (this.level[this.hunter.y][this.hunter.x + 1] == "w") {
+                //     console.log("ты пидор");
+                //     alert("You died");
+                //     this.level[this.hunter.y][this.hunter.x] = "h";
+                // }
+                // if (this.level[this.hunter.y][this.hunter.x + 1] == "0" || this.level[this.hunter.y][this.hunter.x + 1] == "t") {
+                //     if (this.level[this.hunter.y][this.hunter.x + 1] == "t") {
+                //         this.counter++;
+                //         console.log("counter: ", this.counter);
+                //     };
+                //     this.level[this.hunter.y][this.hunter.x] = "0";
+                //     this.hunter.x = this.hunter.x + 1;
+                //     this.level[this.hunter.y][this.hunter.x] = "h";
+                // };
+                this.forwardTo(this.hunter.x, this.hunter.y, "right");
+                break;
+        }
+
+        this.renderField();
     }
 
 }

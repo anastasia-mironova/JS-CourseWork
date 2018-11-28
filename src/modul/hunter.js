@@ -1,21 +1,10 @@
-import {Util} from "./Util"
-import {ObjectsField} from "./ObjectsField"
-
-export class Hunter extends ObjectsField{
-    constructor(){
-        super(Util.cellSize, Util.cellSize, "hunter");
-        this.cellSize = Util.cellSize;
-         
-        
-        this.canvas = document.getElementById("myCanvas");
-        this.ctx = this.canvas.getContext("2d");
+export class Hunter {
+    constructor(x,y){
+        this.x = x;
+        this.y = y; 
     }
 
-    renderHunter(x,y){
-        this.ctx.fillStyle = "#8B0000";
-        this.ctx.fillRect(x,y,this.cellSize,this.cellSize);
-        this.ctx.stroke();
-    }
+   
 
    
 
