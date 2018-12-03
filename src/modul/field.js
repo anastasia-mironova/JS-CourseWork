@@ -1,5 +1,5 @@
-import { Hunter } from "./Hunter"
-import { throws } from "assert";
+import { Hunter } from "./Hunter";
+import { Rogue } from "./Rogue";
 import data from './data';
 
 const fieldObjects = data.fieldObjects;
@@ -22,7 +22,9 @@ export class Field {
 
         this.level = level;
         this.setHunter();
+        this.setRogue();
         console.log("hunter1:", this.hunter);
+        console.log("rogue1:", this.rogue);;
         this.hunterController = this.hunterController.bind(this);
 
         this.counter = 0;
@@ -78,6 +80,9 @@ export class Field {
 
 
                 if (fieldObjects[item]) {
+                    if (item == "r") {
+                        console.log("AAAA r:color:", fieldObjects[item].color);
+                    }
                     this.ctx.fillStyle = fieldObjects[item].color;
                 } else {
                     this.ctx.fillStyle = "#F0F8FF";
@@ -96,11 +101,20 @@ export class Field {
         this.level.forEach((row, rowIndex) => {
             row.forEach((item, colIndex) => {
                 if (this.level[rowIndex][colIndex] == "h") {
-                    console.log("j:", colIndex, "i:", rowIndex);
                     this.hunter = new Hunter(colIndex, rowIndex);
                 }
             });
 
+        });
+    }
+
+    setRogue() {
+        this.level.forEach((row, rowIndex) => {
+            row.forEach((item, colIndex) => {
+                if (this.level[rowIndex][colIndex] == "r") {
+                    this.rogue = new Rogue(colIndex, rowIndex);
+                }
+            });
         });
     }
 
@@ -110,13 +124,12 @@ export class Field {
 
         console.log("x:", dirX, "y:", dirY);
 
-        if (this.level[y + dirY][x+dirX] == "w") {
-            console.log("ты пидор");
+        if (this.level[y + dirY][x + dirX] == "w") {
             alert("You died");
             this.level[y][x] = "h";
         };
-        if (this.level[y + dirY][x+dirX] == "0" || this.level[y + dirY][x+dirX] == "t") {
-            if (this.level[y + dirY][x+dirX] == "t") {
+        if (this.level[y + dirY][x + dirX] != "w" || this.level[y + dirY][x + dirX] == "t") {
+            if (this.level[y + dirY][x + dirX] == "t") {
                 this.counter++;
                 console.log("counter: ", this.counter);
             };
@@ -124,104 +137,106 @@ export class Field {
 
             this.hunter.x = x + dirX;
             this.hunter.y = y + dirY;
-            
+
             this.level[this.hunter.y][this.hunter.x] = "h";
         };
     }
 
     hunterController(e) {
-        // this.forwardTo(1, 1, "up");
         const self = this;
 
         switch (e.keyCode) {
             //up
             case 38:
                 console.log("hunter:", self.hunter);
-
-
-                // if (this.level[this.hunter.y - 1][this.hunter.x] == "w") {
-                //     console.log("ты пидор");
-                //     alert("You died");
-                //     this.level[this.hunter.y][this.hunter.x] = "h";
-                // };
-                // if (this.level[this.hunter.y - 1][this.hunter.x] == "0" || this.level[this.hunter.y - 1][this.hunter.x] == "t") {
-                //     if (this.level[this.hunter.y - 1][this.hunter.x] == "t") {
-                //         this.counter++;
-                //         console.log("counter: ", this.counter);
-                //     };
-                //     this.level[this.hunter.y][this.hunter.x] = "0";
-                //     this.hunter.y = this.hunter.y - 1;
-                //     this.level[this.hunter.y][this.hunter.x] = "h";
-                // };
                 this.forwardTo(this.hunter.x, this.hunter.y, "up");
                 break;
             //down
             case 40:
                 console.log("hunter:", self.hunter);
-
-
-                // if (this.level[this.hunter.y + 1][this.hunter.x] == "w") {
-                //     console.log("ты пидор");
-                //     alert("You died");
-                //     this.level[this.hunter.y][this.hunter.x] = "h";
-                // };
-                // if (this.level[this.hunter.y + 1][this.hunter.x] == "0" || this.level[this.hunter.y + 1][this.hunter.x] == "t") {
-                //     if (this.level[this.hunter.y + 1][this.hunter.x] == "t") {
-                //         this.counter++;
-                //         console.log("counter: ", this.counter);
-                //     };
-                //     this.level[this.hunter.y][this.hunter.x] = "0";
-                //     this.hunter.y = this.hunter.y + 1;
-                //     this.level[this.hunter.y][this.hunter.x] = "h";
-                // };
                 this.forwardTo(this.hunter.x, this.hunter.y, "down");
                 break;
             //left
             case 37:
                 console.log("hunter:", self.hunter);
-
-
-                // if (this.level[this.hunter.y][this.hunter.x - 1] == "w") {
-                //     console.log("ты пидор");
-                //     alert("You died");
-                //     this.level[this.hunter.y][this.hunter.x] = "h";
-                // };
-                // if (this.level[this.hunter.y][this.hunter.x - 1] == "0" || this.level[this.hunter.y][this.hunter.x - 1] == "t") {
-                //     if (this.level[this.hunter.y][this.hunter.x - 1] == "t") {
-                //         this.counter++;
-                //         console.log("counter: ", this.counter);
-                //     };
-                //     this.level[this.hunter.y][this.hunter.x] = "0";
-                //     this.hunter.x = this.hunter.x - 1;
-                //     this.level[this.hunter.y][this.hunter.x] = "h";
-                // };
                 this.forwardTo(this.hunter.x, this.hunter.y, "left");
-
                 break;
             //right
             case 39:
                 console.log("hunter:", self.hunter);
-
-
-                // if (this.level[this.hunter.y][this.hunter.x + 1] == "w") {
-                //     console.log("ты пидор");
-                //     alert("You died");
-                //     this.level[this.hunter.y][this.hunter.x] = "h";
-                // }
-                // if (this.level[this.hunter.y][this.hunter.x + 1] == "0" || this.level[this.hunter.y][this.hunter.x + 1] == "t") {
-                //     if (this.level[this.hunter.y][this.hunter.x + 1] == "t") {
-                //         this.counter++;
-                //         console.log("counter: ", this.counter);
-                //     };
-                //     this.level[this.hunter.y][this.hunter.x] = "0";
-                //     this.hunter.x = this.hunter.x + 1;
-                //     this.level[this.hunter.y][this.hunter.x] = "h";
-                // };
                 this.forwardTo(this.hunter.x, this.hunter.y, "right");
                 break;
         }
 
         this.renderField();
+    }
+
+    testSearch() {
+        this.InitialSearchWave();
+        this.searchWaveAll(1);
+        console.log(this.level);
+    }
+
+    InitialSearchWave() {
+        let d = "1"; 
+
+        this.checkAround(this.rogue.x, this.rogue.y, d);
+    }
+
+    checkAround(x, y, d) {
+        let somethingChanged = false;
+        
+        if ((x == 0 || x == this.level[0].length - 1) ||
+        (y == 0 || y == this.level.length - 1)) {
+            return somethingChanged;
+        }
+        
+        console.log("hue> x:", x, "y:", y, "d:", d);
+
+        if (this.level[y - 1][x] == "0") {
+            this.level[y - 1][x] = d;
+            somethingChanged = true;
+            console.log("Я верх");
+        }
+        if (this.level[y + 1][x] == "0") {
+            this.level[y + 1][x] = d;
+            somethingChanged = true;
+            console.log("Я низ");
+        }
+        if (this.level[y][x - 1] == "0") {
+            this.level[y][x - 1] = d;
+            somethingChanged = true;
+            console.log("Я лево");
+        }
+        if (this.level[y][x + 1] == "0") {
+            this.level[y][x + 1] = d;
+            somethingChanged = true;
+            console.log("Я право и");
+        }
+
+        return somethingChanged;
+    }
+
+    searchWaveAll(d) {
+        let curD = String(d);
+        let aroundD = String(d + 1);
+        let somethingChanged = false;
+
+        this.level.forEach((row, rowIndex) => {
+            row.forEach((element, colIndex) => {
+                if(element === curD) {
+                    console.log("el:", element, "r:", rowIndex, "c:", colIndex);
+                }
+
+                if(element === curD && this.checkAround(colIndex, rowIndex, aroundD)) {
+                    somethingChanged = true;
+                }
+            });
+        });
+
+        if (somethingChanged) {
+            this.searchWaveAll(d + 1);
+        }
     }
 
 }

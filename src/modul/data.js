@@ -9,7 +9,7 @@ const fieldObjects = {
         "color": "#FFD700",
     },
     "r": {
-        "color": "#LALALA",
+        "color": "#1A1A1A",
     }
 }
 
