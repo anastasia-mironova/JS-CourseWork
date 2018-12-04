@@ -1,5 +1,6 @@
 import { Hunter } from "./Hunter";
 import { Rogue } from "./Rogue";
+import { Point } from './Point';
 import data from './data';
 
 const fieldObjects = data.fieldObjects;
@@ -172,26 +173,45 @@ export class Field {
     }
 
     testSearch() {
+        let shortestWay = [];
+
         this.InitialSearchWave();
         this.searchWaveAll(1);
         console.log(this.level);
+        this.InitialFoundWay(shortestWay);
+        this.foundWayAll(shortestWay);
     }
-
+    //
     InitialSearchWave() {
-        let d = "1"; 
+        let d = "1";
 
         this.checkAround(this.rogue.x, this.rogue.y, d);
     }
 
-    checkAround(x, y, d) {
+    checkHunterAround(x, y) {
+        if (this.level[y - 1][x] == "h") {
+            return true;
+        }
+        if (this.level[y + 1][x] == "h") {
+            return true;
+        }
+        if (this.level[y][x - 1] == "h") {
+            return true;
+        }
+        if (this.level[y][x + 1] == "h") {
+            return true;
+        }
+
+        return false;
+    }
+
+    checkAround(x, y, d) {  //d - текущее значение волны 
         let somethingChanged = false;
-        
+
         if ((x == 0 || x == this.level[0].length - 1) ||
-        (y == 0 || y == this.level.length - 1)) {
+            (y == 0 || y == this.level.length - 1)) {
             return somethingChanged;
         }
-        
-        console.log("hue> x:", x, "y:", y, "d:", d);
 
         if (this.level[y - 1][x] == "0") {
             this.level[y - 1][x] = d;
@@ -221,22 +241,84 @@ export class Field {
         let curD = String(d);
         let aroundD = String(d + 1);
         let somethingChanged = false;
+        let hunterFounded = false;
 
         this.level.forEach((row, rowIndex) => {
             row.forEach((element, colIndex) => {
-                if(element === curD) {
-                    console.log("el:", element, "r:", rowIndex, "c:", colIndex);
+                if (element === aroundD && this.checkHunterAround(colIndex, rowIndex)) {
+                    console.log("Ни разу прям?");
+                    hunterFounded = true;
                 }
-
-                if(element === curD && this.checkAround(colIndex, rowIndex, aroundD)) {
+                if (element === curD && this.checkAround(colIndex, rowIndex, aroundD)) {
                     somethingChanged = true;
                 }
             });
         });
 
-        if (somethingChanged) {
+        if (somethingChanged && !hunterFounded) {
             this.searchWaveAll(d + 1);
         }
     }
 
+    InitialFoundWay(arr) {
+        let entryPoint = this.foundWayAround(this.hunter.x, this.hunter.y);
+        arr.unshift(entryPoint);
+    }
+
+    foundWayAll(arr) {
+        const firstPoint = arr[0];
+        const d = this.level[firstPoint.y][firstPoint.x];
+
+        const currentPoint = this.foundWayAround(firstPoint.x, firstPoint.y, d - 1);
+
+        if (currentPoint != "END") {
+            arr.unshift(currentPoint);
+            this.foundWayAll(arr);
+        } 
+    }
+
+    foundWayAround(x, y, d = -1) {
+        // Верх
+        if (!fieldObjects.hasOwnProperty(this.level[y - 1][x])) {
+            if (d != -1) {
+                if (this.level[y - 1][x] == d) {
+                    return new Point(x, y - 1);
+                }
+            } else {
+                return new Point(x, y - 1);
+            }
+        }
+        // Низ
+        if (!fieldObjects.hasOwnProperty(this.level[y + 1][x])) {
+            if (d != -1) {
+                if (this.level[y + 1][x] == d) {
+                    return new Point(x, y + 1);
+                }
+            } else {
+                return new Point(x, y + 1);
+            }
+        }
+        // Лево
+        if (!fieldObjects.hasOwnProperty(this.level[y][x - 1])) {
+            if (d != -1) {
+                if (this.level[y][x - 1] == d) {
+                    return new Point(x - 1, y);
+                }
+            } else {
+                return new Point(x - 1, y);
+            }
+        }
+        // Право
+        if (!fieldObjects.hasOwnProperty(this.level[y][x + 1])) {
+            if (d != -1) {
+                if (this.level[y][x + 1] == d) {
+                    return new Point(x + 1, y);
+                }
+            } else {
+                return new Point(x + 1, y);
+            }
+        }
+
+        return "END";
+    }
 }
