@@ -1,3 +1,104 @@
+@import url('https://fonts.googleapis.com/css?family=Amatic+SC:400,700&subset=cyrillic');
+
+* {
+  font-family: 'Amatic SC', cursive;
+}
+
+.main-grid {
+  display: grid;
+  grid-template-columns: 250px auto;
+  grid-template-rows: calc(100vh - 20px);
+  grid-template-areas: 
+    "menu playground";
+  grid-gap: 10px;
+  padding: 10px;
+  background-color: purple;
+}
+
+.main-grid_menu {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  grid-area: menu;
+  background-color: darkblue;
+}
+
+.main-grid_playground {
+  grid-area: playground;
+  background-color: aquamarine;
+  background: url(./img/pirate.jpg);
+  background-position-x: center;
+  background-position-y: center;
+  background-size: cover;
+}
+
 body {
+  padding: 0;
+  margin: 0;
   background-color: orange;
+  background: url(./img/anime.jpg);
+}
+
+.score-component {
+  font-weight: bold;
+  display: block;
+  margin: 0px;
+  padding: 0px;
+}
+.score-component_item {
+  font-size: 20pt;
+  display: block;
+  background-color: blueviolet;
+  border: #F0F8FF solid 1px;
+  margin: 8px 8px;
+  padding: 12px;
+  text-align: center;
+  border-radius: 15px;
+}
+
+.menu-component {
+  font-family: 'Amatic SC', cursive;
+  font-weight: bold;
+  display: block;
+  margin: 0px;
+  padding: 0px;
+}
+.menu-component_item {
+  transition: all;
+  transition-duration: .1s;
+  transition-timing-function: ease-in-out;
+  font-size: 20pt;
+  display: block;
+  background-color: orangered;
+  border: #F0F8FF solid 1px;
+  margin: 8px 8px;
+  padding: 12px;
+  text-align: center;
+  border-radius: 15px;
+  cursor: pointer;
+}
+
+.menu-component_item:hover {
+  background-color: lightcoral;
+}
+
+.menu-preview {
+  margin: 0 auto;
+  max-width: 450px;
+}
+
+.menu-preview_header {
+  text-align: center;
+  margin: 50px 0;
+  font-size: 60px;
+  font-weight: bold;
+  text-shadow: 2px 2px 0px rgba(241, 124, 204, 1);
+}
+
+.disabled { 
+  display: none;
+}
+
+canvas{
+
 }

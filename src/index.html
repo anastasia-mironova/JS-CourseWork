@@ -1,21 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Treasure Hunter</title>
-    <style>
-    	* { padding: 0; margin: 0; }
-    	canvas { background: #F0F8FF; display: block; margin: 0 auto; }
-    </style>
 </head>
 </head>
+
 <body>
-        <canvas id="myCanvas" width="720" height="540"></canvas>
-        <style type="css/text">
-            canvas{border: 30px solid black}
-        </style>
-    
+    <div class="preview">
+        <div class="menu-preview_header">INCREDIBLE JOURNEY OF THE TREASURE HUNTER</div>
+        <ul class="menu-component menu-preview" id="menu-preview-el">
+            <li class="menu-component_item start">Начать</li>
+            <li class="menu-component_item records">Рекорды</li>
+        </ul>
+    </div>
+    <div class="game main-grid disabled">
+        <div class="main-grid_menu">
+            <ul class="score-component" id="score-el">
+                <li class="score-component_item">Уровень: <span class="level">1</span></li>
+                <li class="score-component_item">Счет: <span class="score">0</span></li>
+            </ul>
+            <div class="menu-component" id="menu-el">
+                <li class="menu-component_item pause">Пауза</li>
+                <li class="menu-component_item exit">Выход</li>
+            </div>
+        </div>
+        <div class="main-grid_playground">
+            <canvas id="myCanvas" width="100" height="100"></canvas>
+        </div>
+    </div>
 </body>
+
 </html>

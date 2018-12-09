@@ -3,12 +3,4 @@ export class Hunter {
         this.x = x;
         this.y = y; 
     }
-
-   
-
-   
-
-
-
-
 }
