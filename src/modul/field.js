@@ -10,9 +10,11 @@ const direction = data.direction;
 
 
 export class Field {
-    constructor(level, score, myEvent) {
+    constructor(level, score, myEvent, diedEvent) {
         this.score = score;
         this.myEvent = myEvent;
+        this.diedEvent = diedEvent;
+        console.log("this.diedEvent", this.diedEvent);
 
         this.x0 = 0;
         this.y0 = 0;
@@ -138,7 +140,8 @@ export class Field {
         console.log("x:", dirX, "y:", dirY);
 
         if (this.level[y + dirY][x + dirX] == "w") {
-            alert("You died");
+            console.log("this.diedEvent1", this.diedEvent);
+            dispatchEvent(this.diedEvent);
             this.level[y][x] = "h";
         };
         if (this.level[y + dirY][x + dirX] != "w" || this.level[y + dirY][x + dirX] == "t") {

@@ -2,6 +2,7 @@ import { Field } from "./modul/field"
 import { Hunter } from "./modul/hunter"
 import { Score } from './modul/Score';
 import { Menu } from './modul/Menu';
+import { Record } from './modul/Record';
 import './style.css';
 
 const levels = [
@@ -21,8 +22,26 @@ const levels = [
     ["w", "w", "w", "w", "w", "w"]]
 ];
 
+let self = this;
+let kek;
+let kekStoper;
+
+let gameStartEvent = new Event("startgame");
+addEventListener("startgame", function() {
+    initField(levels[0]);
+});
+
+let recordsEvent = new Event("recordsClicked");
+addEventListener("recordsClicked", function() {
+    console.log("records clicked");
+
+    const table = document.querySelector("#table-content");
+    console.log("table:", table);
+
+});
+
 const menuPreviewElement = document.querySelector('#menu-preview-el');
-const menuPreview = new Menu(menuPreviewElement);
+const menuPreview = new Menu(menuPreviewElement, gameStartEvent, recordsEvent);
 
 const menuElement = document.querySelector('#menu-el');
 const menu = new Menu(menuElement);
@@ -38,9 +57,6 @@ const score = new Score(scoreElement);
 
 // const menuPreviewElement = document.querySelector('#menu-preview-el');
 // const menuPreview = new Menu(menuPreviewElement);
-
-let kek;
-let kekStoper;
 
 score.level = 1;
 
@@ -58,11 +74,11 @@ addEventListener("arbidol", function () {
     }, 1);
 });
 
-initField(levels[0]);
+// initField(levels[0]);
 
 function initField(level) {
     
-    kek = new Field(level, score, myEvent);
+    kek = new Field(level, score, myEvent, diedEvent);
     addEventListener("keydown", kek.hunterController);
   
     // kekStoper = kek.rougueController();
@@ -77,5 +93,66 @@ function finalizeField(field) {
     removeEventListener("keydown", field.hunterController);
    
     clearInterval(kekStoper);
-   
+}
+
+let diedEvent = new Event("hunterDied");
+addEventListener("hunterDied", function() {
+    hunterDied();
+})
+
+function hunterDied() {
+    alert("Ваши полномочия всё, окончены");
+    const name = prompt("Ваше имя", "Пидор");
+
+    updateRecords(name, score.score);
+    showLocalStorage();
+
+    finalizeField();
+}
+
+function updateRecords(name, record) {
+    console.log("update records function > name:", name, "record:", record);
+
+    let newRecord = new Record(name, record);
+    
+    const nameStrArr = localStorage["name"];
+    const valueStrArr = localStorage["value"];
+
+    const nameArr = nameStrArr.split(",");
+    const valueArr = valueStrArr.split(",");
+
+    const length = nameArr.length;
+
+    let records = [];
+
+    for (let i = 0; i < length; i++) {
+        records[i] = new Record(nameArr[i], valueArr[i]);
+    }
+
+    records.push(newRecord);
+
+    console.log("new records:", records);
+
+    records.sort((a, b) => b.value - a.value);
+    records.splice(10);
+
+    let newNameArr = [];
+    let newValueArr = [];
+
+    const newLength = records.length;
+
+    for (let i = 0; i < newLength; i++) {
+        newNameArr[i] = records[i].name;
+        newValueArr[i] = records[i].value;
+    }
+
+    console.log("newName:", newNameArr);
+    console.log("newValue:", newValueArr);
+
+    localStorage.setItem("name", newNameArr);
+    localStorage.setItem("value", newValueArr);
+}
+
+function showLocalStorage() {
+    console.log("show local storage:", localStorage);
 }

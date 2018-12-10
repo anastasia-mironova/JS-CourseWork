@@ -1,5 +1,10 @@
 export class Menu {
-    constructor(el) {
+    constructor(el, event, rec) {
+        this.startgame = event ? event : null;
+        this.recordsEvent = rec ? rec : null;
+
+        console.log("Ну харо", this.recordsEvent);
+
         self = this;
         setTimeout(() => {
             this.startElement = el.querySelector(".start");
@@ -23,6 +28,9 @@ export class Menu {
                 this.exitElement.addEventListener("click", this.exit);
             }
         }, 100);
+
+        this.start = this.start.bind(this);
+        this.records = this.records.bind(this);
     }
 
     start() {
@@ -32,18 +40,34 @@ export class Menu {
 
         current.classList.add("disabled");
         game.classList.remove("disabled");
+        console.log("this.startgame", this.startgame);
+        dispatchEvent(this.startgame);
     }
     
     records() {
-        console.log("click records");
+        const preview = document.querySelector('.preview');
+        const records = document.querySelector('.records-el');
+        const game = document.querySelector('.game');
+        
+        console.log("our records:", records);
+
+        preview.classList.add("disabled");
+        records.classList.remove("disabled");
+        game.classList.add("disabled");
+
+        dispatchEvent(this.recordsEvent);
+
+        
     }
     
     exit() {
         console.log("click exit");
-        const current = document.querySelector('.preview');
+        const preview = document.querySelector('.preview');
+        const records = document.querySelector('.records-el');
         const game = document.querySelector('.game');
         
-        current.classList.remove("disabled");
+        preview.classList.remove("disabled");
+        records.classList.add("disabled");
         game.classList.add("disabled");
     }
     

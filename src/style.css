@@ -99,6 +99,13 @@ body {
   display: none;
 }
 
-canvas{
+.records-table {
+  background-color: orange;
+  font-size: 30px;
+  font-weight: bold;
+}
 
+.records-table td {
+  background-color: aqua;
+  padding: 0px 20px;
 }
