@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Treasure Hunter</title>
+    <link href="style.css" rel="stylesheet">
+    <script src="index.js"></script>
+</head>
+
+
+<body>
+     
+    
+    <div class="preview">
+        <div class="menu-preview_header">INCREDIBLE JOURNEY OF THE TREASURE HUNTER</div>
+        <ul class="menu-component menu-preview" id="menu-preview-el">
+            <li class="menu-component_item start">Начать</li>
+            <li class="menu-component_item records">Рекорды</li>
+        </ul>
+    </div>
+    <div class="records-el disabled">
+        <div class="menu-preview_header">РЕКОРДЫ</div>
+        <table class="records-table">
+            <thead>
+                <th>№</th>
+                <th>Имя</th>
+                <th>Рекорд</th>
+            </thead>
+            <tbody id="table-content">
+                <tr class="el">
+                    <td>1</td>
+                    <td class="name"></td>
+                    <td class="value"></td>
+                </tr>
+                <tr class="el">
+                    <td>2</td>
+                    <td class="name"></td>
+                    <td class="value"></td>
+                </tr>
+                <tr class="el">
+                    <td>3</td>
+                    <td class="name"></td>
+                    <td class="value"></td>
+                </tr>
+                <tr class="el">
+                    <td>4</td>
+                    <td class="name"></td>
+                    <td class="value"></td>
+                </tr>
+                <tr class="el">
+                    <td>5</td>
+                    <td class="name"></td>
+                    <td class="value"></td>
+                </tr>
+                <tr class="el">
+                    <td>6</td>
+                    <td class="name"></td>
+                    <td class="value"></td>
+                </tr>
+                <tr class="el">
+                    <td>7</td>
+                    <td class="name"></td>
+                    <td class="value"></td>
+                </tr>
+                <tr class="el">
+                    <td>8</td>
+                    <td class="name"></td>
+                    <td class="value"></td>
+                </tr>
+                <tr class="el">
+                    <td>9</td>
+                    <td class="name"></td>
+                    <td class="value"></td>
+                </tr>
+                <tr class="el">
+                    <td>10</td>
+                    <td class="name"></td>
+                    <td class="value"></td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="menu-component_item records_exit">
+            Выход
+        </div>
+    </div>
+    <div class="game main-grid disabled">
+        <div class="main-grid_menu">
+            <ul class="score-component" id="score-el">
+                <li class="score-component_item">Уровень: <span class="level">1</span></li>
+                <li class="score-component_item">Счет: <span class="score">0</span></li>
+            </ul>
+            <div class="menu-component" id="menu-el">
+                <li class="menu-component_item pause">Пауза</li>
+                <li class="menu-component_item exit">Выход</li>
+            </div>
+        </div>
+        <div class="main-grid_playground">
+            <canvas id="myCanvas" width="100" height="100"></canvas>
+        </div>
+    </div>
+<script type="text/javascript" src="main.js"></script></body>
+
+</html>
