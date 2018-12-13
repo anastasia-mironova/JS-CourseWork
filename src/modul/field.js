@@ -11,6 +11,7 @@ const direction = data.direction;
 
 export class Field {
     constructor(level, score, myEvent, diedEvent) {
+        this.paused = false;
         this.score = score;
         this.myEvent = myEvent;
         this.diedEvent = diedEvent;
@@ -25,18 +26,19 @@ export class Field {
         this.ctx = this.setupCanvas("myCanvas", "2d");
 
 
-
+        this.initialLevel = level;
         this.level = level;
         this.setHunter();
         this.setRogue();
+        this.treasureCount = this.getTreasure();
         this.hunterController = this.hunterController.bind(this);
         this.rougueController = this.rougueController.bind(this);
-        this.treasureCount = this.getTreasure();
         this.counter = 0;
 
 
     }
 
+    //Определение размеров холста Canvas в зависимости от размеров окна 
     setupCanvas(id, context) {
         let canvas = document.getElementById(id);
         let parent = canvas.parentElement;
@@ -65,6 +67,7 @@ export class Field {
         return ctx;
     }
 
+    //Отрисовка элементов игрового поля
     renderField() {
         this.ctx.beginPath();
         for (let col = 0; col < this.cols; col++) {
@@ -100,6 +103,8 @@ export class Field {
 
         this.ctx.stroke();
     }
+
+    //
     getTreasure() {
         let treasureCount = 0;
         this.level.forEach((row, rowIndex) => {
@@ -113,6 +118,7 @@ export class Field {
         });
         return treasureCount;
     }
+    //Инициализация координат «Охотника», являющегося экзепляром класса Hunter
     setHunter() {
         this.level.forEach((row, rowIndex) => {
             row.forEach((item, colIndex) => {
@@ -123,7 +129,7 @@ export class Field {
 
         });
     }
-
+    //Инициализация координат «Разбойника», являющегося экзепляром класса Rogue
     setRogue() {
         this.level.forEach((row, rowIndex) => {
             row.forEach((item, colIndex) => {
@@ -133,60 +139,64 @@ export class Field {
             });
         });
     }
-
+    //Изменение значений элементов матрицы уровня в зависимости от напрвления движения «Охотника»
     forwardTo(x, y, dir) {
-        const dirX = direction[dir].x;
-        const dirY = direction[dir].y;
-        console.log("x:", dirX, "y:", dirY);
+        if (!this.paused) {
+            const dirX = direction[dir].x;
+            const dirY = direction[dir].y;
+            console.log("x:", dirX, "y:", dirY);
 
-        if (this.level[y + dirY][x + dirX] == "w") {
-            console.log("this.diedEvent1", this.diedEvent);
-            dispatchEvent(this.diedEvent);
-            this.level[y][x] = "h";
-        };
-        if (this.level[y + dirY][x + dirX] != "w" || this.level[y + dirY][x + dirX] == "t") {
-            if (this.level[y + dirY][x + dirX] == "t") {
-                this.counter++;
-                this.score.incScore();
-                if (this.checkEndless(this.counter)) {
-
-                    dispatchEvent(this.myEvent);
-                }
+            if (this.level[y + dirY][x + dirX] == "w") {
+                console.log("this.diedEvent1", this.diedEvent);
+                dispatchEvent(this.diedEvent);
+                this.level[y][x] = "h";
             };
-            this.level[y][x] = "0";
+            if (this.level[y + dirY][x + dirX] != "w" || this.level[y + dirY][x + dirX] == "t") {
+                if (this.level[y + dirY][x + dirX] == "t") {
+                    this.counter++;
+                    this.score.incScore();
+                    if (this.checkEndless(this.counter)) {
 
-            this.hunter.x = x + dirX;
-            this.hunter.y = y + dirY;
+                        dispatchEvent(this.myEvent);
+                    }
+                };
+                this.level[y][x] = "0";
 
-            this.level[this.hunter.y][this.hunter.x] = "h";
-        };
+                this.hunter.x = x + dirX;
+                this.hunter.y = y + dirY;
+
+                this.level[this.hunter.y][this.hunter.x] = "h";
+            };
+        }
     }
-
+    //Проверка столкновения «Охтника» с «Разбойником»
     hunterAlive() {
         return !(this.rogue.x === this.hunter.x && this.rogue.y === this.hunter.y);
     }
-
+    //Движение «Разбойника» за «Охотником»
     rougueController() {
         let stoper = setInterval(() => {
-            const shortest = this.testSearch();
+            if (!this.paused) {
+                const shortest = this.testSearch();
 
-            this.level[this.rogue.y][this.rogue.x] = "0";
+                this.level[this.rogue.y][this.rogue.x] = "0";
 
-            this.rogue.x = shortest[0].x;
-            this.rogue.y = shortest[0].y;
+                this.rogue.x = shortest[0].x;
+                this.rogue.y = shortest[0].y;
 
-            this.level[this.rogue.y][this.rogue.x] = "r";
+                this.level[this.rogue.y][this.rogue.x] = "r";
 
-            this.renderField();
+                this.renderField();
 
-            if (!this.hunterAlive()) {
-                alert("You died");
+                if (!this.hunterAlive()) {
+                    dispatchEvent(this.diedEvent);
+                }
             }
         }, 1000);
 
         return stoper;
     }
-
+    //Обработчик нажатия клавиш для движения «Охотника»
     hunterController(e) {
 
         const self = this;
@@ -217,6 +227,7 @@ export class Field {
         this.renderField();
     }
 
+    //
     testSearch() {
         let localLevel = cloneDeep(this.level);
         let shortestWay = [new Point(this.hunter.x, this.hunter.y)];
@@ -229,13 +240,13 @@ export class Field {
 
         return shortestWay;
     }
-    //
+    //Инициализация стартовой ячейки для реализации волнового алгоритма 
     InitialSearchWave(localArr) {
         let d = "1";
 
         this.checkAround(localArr, this.rogue.x, this.rogue.y, d);
     }
-
+    //Проверка на совпадение с финишной ячейкой
     checkHunterAround(localArr, x, y) {
         if (localArr[y - 1][x] == "h") {
             return true;
@@ -252,7 +263,7 @@ export class Field {
 
         return false;
     }
-
+    // Проверка проходимости ячеек
     checkAround(localArr, x, y, d) {  //d - текущее значение волны 
         let somethingChanged = false;
 
@@ -280,7 +291,7 @@ export class Field {
 
         return somethingChanged;
     }
-
+    //Изменение стартовой ячейки
     searchWaveAll(localArr, d) {
         let curD = String(d);
         let aroundD = String(d + 1);
@@ -302,7 +313,7 @@ export class Field {
             this.searchWaveAll(localArr, d + 1);
         }
     }
-
+    //Инициализация финишной ячейки при востановлении пути
     InitialFoundWay(localArr, arr) {
         let entryPoint = this.foundWayAround(localArr, this.hunter.x, this.hunter.y);
 
@@ -310,7 +321,7 @@ export class Field {
             arr.unshift(entryPoint);
         }
     }
-
+    //Рекурсивное повторение предыдущих шагов восстановления пути при реализации волнового алгоритма 
     foundWayAll(localArr, arr) {
         const firstPoint = arr[0];
         const d = localArr[firstPoint.y][firstPoint.x];
@@ -322,7 +333,7 @@ export class Field {
             this.foundWayAll(localArr, arr);
         }
     }
-
+    //Проверка следующей ячейки на значение d-1, где d- значение в текущей ячейке
     foundWayAround(localArr, x, y, d = -1) {
         // Верх
         if (!fieldObjects.hasOwnProperty(localArr[y - 1][x])) {
@@ -367,7 +378,7 @@ export class Field {
 
         return "END";
     }
-
+    //Проверка на завершение уровн(сбор всех «Кладов»)
     checkEndless(count) {
         if (count == this.treasureCount) {
             return true;
@@ -375,5 +386,13 @@ export class Field {
         else {
             return false
         }
+    }
+
+    setInitialState() {
+        console.log("Обнуляемся тип");
+        this.level = this.initialLevel;
+        this.setHunter();
+        this.setRogue();
+        // this.treasureCount = this.getTreasure();
     }
 }

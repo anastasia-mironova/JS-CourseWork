@@ -3,7 +3,7 @@ export class Menu {
         this.startgame = event ? event : null;
         this.recordsEvent = rec ? rec : null;
 
-        console.log("Ну харо", this.recordsEvent);
+        
 
         self = this;
         setTimeout(() => {
@@ -19,10 +19,6 @@ export class Menu {
             if (this.recordsElement) {
                 this.recordsElement.addEventListener("click", this.records);
             }
-
-            if (this.pauseElement) {
-                this.pauseElement.addEventListener("click", this.pause);
-            }
             
             if (this.exitElement) {
                 this.exitElement.addEventListener("click", this.exit);
@@ -32,7 +28,7 @@ export class Menu {
         this.start = this.start.bind(this);
         this.records = this.records.bind(this);
     }
-
+//Процедура, срабатывающая при нажатии кнопки «Начать»
     start() {
         console.log("click start");
         const current = document.querySelector('.preview');
@@ -43,7 +39,7 @@ export class Menu {
         console.log("this.startgame", this.startgame);
         dispatchEvent(this.startgame);
     }
-    
+   //Процедура, срабатывающая при нажатии кнопки «Рекорды» 
     records() {
         const preview = document.querySelector('.preview');
         const records = document.querySelector('.records-el');
@@ -59,7 +55,7 @@ export class Menu {
 
         
     }
-    
+    //Процедура, срабатывающая при нажатии кнопки «Выход»
     exit() {
         console.log("click exit");
         const preview = document.querySelector('.preview');
@@ -70,8 +66,5 @@ export class Menu {
         records.classList.add("disabled");
         game.classList.add("disabled");
     }
-    
-    pause() {
-        console.log("click pause");
-    }
+    //Процедура, срабатывающая при нажатии кнопки «Пауза»
 }
