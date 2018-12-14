@@ -42,7 +42,8 @@ const levels = [
     ["w", "0", "w", "w", "t", "0", "0", "w"],
     ["w", "w", "w", "0", "w", "w", "0", "w"],
     ["w", "t", "0", "0", "0", "t", "0", "w"],
-    ["w", "w", "w", "w", "w", "w", "w", "w"]],
+    ["w", "w", "w", "w", "w", "w", "w", "w"]]
+    ,
     //4
     [["w", "w", "w", "w", "w", "w", "w", "w"],
     ["w", "r", "w", "t", "w", "0", "t", "w"],
@@ -269,8 +270,8 @@ function updateRecords(name, record) {
 
 
 function getRecords() {
-    const nameStrArr = localStorage["name"];
-    const valueStrArr = localStorage["value"];
+    const nameStrArr = localStorage["name"] || "";
+    const valueStrArr = localStorage["value"] || "";
 
     const nameArr = nameStrArr.split(",");
     const valueArr = valueStrArr.split(",");
@@ -324,8 +325,7 @@ function endGame() {
 
     finalizeField(levelField);
     
-    // score.level= 0;
-    // score.score = 0;
+    
     const preview = document.querySelector('.preview');
     const records = document.querySelector('.records-el');
     const game = document.querySelector('.game');
