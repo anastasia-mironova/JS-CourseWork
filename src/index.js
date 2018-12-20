@@ -130,8 +130,7 @@ let gameStartEvent = new Event("startgame");
 addEventListener("startgame", function () {
     if (levelField) {
         finalizeField(levelField);
-        // initField(test);
-        // finalizeField(levelField);
+        
     }
     initField(cloneDeep(initialLevel));
 
@@ -142,14 +141,14 @@ addEventListener("startgame", function () {
 
 let recordsEvent = new Event("recordsClicked");
 addEventListener("recordsClicked", function () {
-    console.log("records clicked");
+ 
 
     const table = document.querySelector("#table-content");
-    console.log("table:", table);
+    
 
     const tableElements = table.querySelectorAll(".el");
 
-    console.log(tableElements);
+   
 
     const records = getRecords();
 
@@ -169,14 +168,7 @@ const menu = new Menu(menuElement);
 const scoreElement = document.querySelector("#score-el");
 const score = new Score(scoreElement);
 
-// let searchTestField = new Field(testLevel);
 
-//  searchTestField.renderField();
-//  console.log(searchTestField.level);
-// searchTestField.rougueController();
-
-// const menuPreviewElement = document.querySelector('#menu-preview-el');
-// const menuPreview = new Menu(menuPreviewElement);
 
 score.level = 1;
 
@@ -201,26 +193,18 @@ addEventListener("arbidol", function () {
     }, 1);
 });
 
-// initField(levels[0]);
+
 
 function initField(level) {
-    if (levelField) {
-        console.log("четыреждыблядский кек");
-        // levelField.setInitialState();
-    } else {
-        console.log("Ляли больше нет")
-    }
+    
     levelField = new Field(level, score, myEvent, diedEvent);
     addEventListener("keydown", levelField.hunterController);
 
     levelFieldStoper = levelField.rougueController();
-    console.log("levelField:", levelField);
     levelField.renderField();
 }
 
 function finalizeField(field) {
-    // field.ctx.fillStyle = "#F0F8FF";
-    console.log("Останавливаем это дерьмо", field);
     field.ctx.clearRect(0, 0, field.ctx.canvas.width, field.ctx.canvas.height);
     removeEventListener("keydown", field.hunterController);
 
@@ -229,7 +213,6 @@ function finalizeField(field) {
 
 let diedEvent = new Event("hunterDied");
 addEventListener("hunterDied", function () {
-    console.log("Дайднулось тип");
     hunterDied();
 })
 
@@ -240,9 +223,10 @@ function hunterDied() {
     updateRecords(name, score.score);
 
     finalizeField(levelField);
-
-    // initField(levels[score.level]);
-
+     
+    score.level = 1;
+    score.score = 0;
+    
     const preview = document.querySelector('.preview');
     const records = document.querySelector('.records-el');
     const game = document.querySelector('.game');
@@ -253,7 +237,6 @@ function hunterDied() {
 }
 
 function updateRecords(name, record) {
-    console.log("update records function > name:", name, "record:", record);
 
     let newRecord = new Record(name, record);
 
@@ -324,7 +307,9 @@ function endGame() {
     updateRecords(name, score.score);
 
     finalizeField(levelField);
-    
+    con
+    // score.level = 1;
+    // score.score = 0;
     
     const preview = document.querySelector('.preview');
     const records = document.querySelector('.records-el');

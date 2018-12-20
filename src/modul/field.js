@@ -15,7 +15,6 @@ export class Field {
         this.score = score;
         this.myEvent = myEvent;
         this.diedEvent = diedEvent;
-        console.log("this.diedEvent", this.diedEvent);
 
         this.x0 = 0;
         this.y0 = 0;
@@ -144,10 +143,8 @@ export class Field {
         if (!this.paused) {
             const dirX = direction[dir].x;
             const dirY = direction[dir].y;
-            console.log("x:", dirX, "y:", dirY);
 
             if (this.level[y + dirY][x + dirX] == "w") {
-                console.log("this.diedEvent1", this.diedEvent);
                 dispatchEvent(this.diedEvent);
                 this.level[y][x] = "h";
             };
@@ -204,22 +201,22 @@ export class Field {
         switch (e.keyCode) {
             //up
             case 38:
-                console.log("hunter:", self.hunter);
+                
                 this.forwardTo(this.hunter.x, this.hunter.y, "up");
                 break;
             //down
             case 40:
-                console.log("hunter:", self.hunter);
+               
                 this.forwardTo(this.hunter.x, this.hunter.y, "down");
                 break;
             //left
             case 37:
-                console.log("hunter:", self.hunter);
+               
                 this.forwardTo(this.hunter.x, this.hunter.y, "left");
                 break;
             //right
             case 39:
-                console.log("hunter:", self.hunter);
+                
                 this.forwardTo(this.hunter.x, this.hunter.y, "right");
                 break;
         }
@@ -388,11 +385,5 @@ export class Field {
         }
     }
 
-    setInitialState() {
-        console.log("Обнуляемся тип");
-        this.level = this.initialLevel;
-        this.setHunter();
-        this.setRogue();
-        // this.treasureCount = this.getTreasure();
-    }
+    
 }
