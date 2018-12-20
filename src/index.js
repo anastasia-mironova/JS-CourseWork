@@ -132,8 +132,10 @@ addEventListener("startgame", function () {
         finalizeField(levelField);
         
     }
-    initField(cloneDeep(initialLevel));
 
+    initField(cloneDeep(initialLevel));
+    // levelField.paused = !levelField.paused;
+    
     setTimeout(function () {
         levelField.renderField();
     }, 1);
@@ -214,6 +216,7 @@ function finalizeField(field) {
 let diedEvent = new Event("hunterDied");
 addEventListener("hunterDied", function () {
     hunterDied();
+    
 })
 
 function hunterDied() {
@@ -226,7 +229,7 @@ function hunterDied() {
      
     score.level = 1;
     score.score = 0;
-    
+    levelField.paused = !levelField.paused;
     const preview = document.querySelector('.preview');
     const records = document.querySelector('.records-el');
     const game = document.querySelector('.game');
@@ -299,6 +302,19 @@ document.querySelector(".pause").addEventListener("click", function() {
     levelField.paused = !levelField.paused;
 });
 
+document.querySelector(".exit").addEventListener("click", function(){
+    console.log("click exit");
+        const preview = document.querySelector('.preview');
+        const records = document.querySelector('.records-el');
+        const game = document.querySelector('.game');
+        
+        preview.classList.remove("disabled");
+        records.classList.add("disabled");
+        game.classList.add("disabled");
+        
+    levelField.paused = !levelField.paused;
+});
+
 function endGame() {
     
     alert("This is the end");
@@ -307,9 +323,8 @@ function endGame() {
     updateRecords(name, score.score);
 
     finalizeField(levelField);
-    con
-    // score.level = 1;
-    // score.score = 0;
+    
+   
     
     const preview = document.querySelector('.preview');
     const records = document.querySelector('.records-el');

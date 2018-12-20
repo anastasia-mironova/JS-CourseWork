@@ -56,15 +56,16 @@ export class Menu {
         
     }
     //Процедура, срабатывающая при нажатии кнопки «Выход»
-    exit() {
-        console.log("click exit");
-        const preview = document.querySelector('.preview');
-        const records = document.querySelector('.records-el');
-        const game = document.querySelector('.game');
+    // exit() {
+    //     console.log("click exit");
+    //     const preview = document.querySelector('.preview');
+    //     const records = document.querySelector('.records-el');
+    //     const game = document.querySelector('.game');
         
-        preview.classList.remove("disabled");
-        records.classList.add("disabled");
-        game.classList.add("disabled");
-    }
-    //Процедура, срабатывающая при нажатии кнопки «Пауза»
+    //     preview.classList.remove("disabled");
+    //     records.classList.add("disabled");
+    //     game.classList.add("disabled");
+        
+    // }
+    
 }

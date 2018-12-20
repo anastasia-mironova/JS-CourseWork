@@ -144,7 +144,7 @@ export class Field {
             const dirX = direction[dir].x;
             const dirY = direction[dir].y;
 
-            if (this.level[y + dirY][x + dirX] == "w") {
+            if (this.level[y + dirY][x + dirX] == "w" || this.level[y + dirY][x + dirX] == "r") {
                 dispatchEvent(this.diedEvent);
                 this.level[y][x] = "h";
             };
@@ -175,6 +175,7 @@ export class Field {
         let stoper = setInterval(() => {
             if (!this.paused) {
                 const shortest = this.testSearch();
+                console.log("shortest way:", cloneDeep(shortest));
 
                 this.level[this.rogue.y][this.rogue.x] = "0";
 
@@ -189,6 +190,9 @@ export class Field {
                     dispatchEvent(this.diedEvent);
                 }
             }
+
+            console.log("rogue:", cloneDeep(this.level));
+
         }, 1000);
 
         return stoper;
@@ -221,6 +225,8 @@ export class Field {
                 break;
         }
 
+        console.log("hunter:", cloneDeep(this.level));
+
         this.renderField();
     }
 
@@ -233,7 +239,9 @@ export class Field {
         this.searchWaveAll(localLevel, 1);
 
         this.InitialFoundWay(localLevel, shortestWay);
+        console.log("after initial found way:", cloneDeep(shortestWay));
         this.foundWayAll(localLevel, shortestWay);
+        console.log("after found way all:", cloneDeep(shortestWay));
 
         return shortestWay;
     }
@@ -312,6 +320,7 @@ export class Field {
     }
     //Инициализация финишной ячейки при востановлении пути
     InitialFoundWay(localArr, arr) {
+        console.log("local arr:", cloneDeep(localArr));
         let entryPoint = this.foundWayAround(localArr, this.hunter.x, this.hunter.y);
 
         if (entryPoint != "END") {
@@ -334,7 +343,7 @@ export class Field {
     foundWayAround(localArr, x, y, d = -1) {
         // Верх
         if (!fieldObjects.hasOwnProperty(localArr[y - 1][x])) {
-            if (d != -1) {
+            if (d != 0) {
                 if (localArr[y - 1][x] == d) {
                     return new Point(x, y - 1);
                 }
