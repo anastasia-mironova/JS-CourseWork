@@ -34,7 +34,7 @@ export class Field {
         this.rougueController = this.rougueController.bind(this);
         this.counter = 0;
 
-
+        this.testSearch();
     }
 
     //Определение размеров холста Canvas в зависимости от размеров окна 
@@ -157,7 +157,7 @@ export class Field {
                         dispatchEvent(this.myEvent);
                     }
                 };
-                this.level[y][x] = "0";
+                this.level[y][x] = "e";
 
                 this.hunter.x = x + dirX;
                 this.hunter.y = y + dirY;
@@ -175,9 +175,8 @@ export class Field {
         let stoper = setInterval(() => {
             if (!this.paused) {
                 const shortest = this.testSearch();
-                console.log("shortest way:", cloneDeep(shortest));
 
-                this.level[this.rogue.y][this.rogue.x] = "0";
+                this.level[this.rogue.y][this.rogue.x] = "e";
 
                 this.rogue.x = shortest[0].x;
                 this.rogue.y = shortest[0].y;
@@ -191,7 +190,6 @@ export class Field {
                 }
             }
 
-            console.log("rogue:", cloneDeep(this.level));
 
         }, 1000);
 
@@ -225,7 +223,6 @@ export class Field {
                 break;
         }
 
-        console.log("hunter:", cloneDeep(this.level));
 
         this.renderField();
     }
@@ -239,9 +236,7 @@ export class Field {
         this.searchWaveAll(localLevel, 1);
 
         this.InitialFoundWay(localLevel, shortestWay);
-        console.log("after initial found way:", cloneDeep(shortestWay));
         this.foundWayAll(localLevel, shortestWay);
-        console.log("after found way all:", cloneDeep(shortestWay));
 
         return shortestWay;
     }
@@ -277,19 +272,19 @@ export class Field {
             return somethingChanged;
         }
 
-        if (localArr[y - 1][x] == "0") {
+        if (localArr[y - 1][x] == "e") {
             localArr[y - 1][x] = d;
             somethingChanged = true;
         }
-        if (localArr[y + 1][x] == "0") {
+        if (localArr[y + 1][x] == "e") {
             localArr[y + 1][x] = d;
             somethingChanged = true;
         }
-        if (localArr[y][x - 1] == "0") {
+        if (localArr[y][x - 1] == "e") {
             localArr[y][x - 1] = d;
             somethingChanged = true;
         }
-        if (localArr[y][x + 1] == "0") {
+        if (localArr[y][x + 1] == "e") {
             localArr[y][x + 1] = d;
             somethingChanged = true;
         }
@@ -320,17 +315,92 @@ export class Field {
     }
     //Инициализация финишной ячейки при востановлении пути
     InitialFoundWay(localArr, arr) {
-        console.log("local arr:", cloneDeep(localArr));
-        let entryPoint = this.foundWayAround(localArr, this.hunter.x, this.hunter.y);
+        // let entryPoint = this.foundWayAround(localArr, this.hunter.x, this.hunter.y);
+        let x = this.hunter.x;
+        let y = this.hunter.y;
 
-        if (entryPoint != "END") {
-            arr.unshift(entryPoint);
+        let minStepAround;
+        let truthPoint;
+
+        let counter = 0;
+
+        if (!fieldObjects.hasOwnProperty(localArr[y - 1][x]) || localArr[y - 1][x] == "r") {
+            counter++;
+            if (localArr[y - 1][x] == "r") {
+                return;
+            }
+            
+            minStepAround = +localArr[y - 1][x];
+            truthPoint = new Point(x, y - 1);
         }
-    }
-    //Рекурсивное повторение предыдущих шагов восстановления пути при реализации волнового алгоритма 
+        // Низ
+        if (!fieldObjects.hasOwnProperty(localArr[y + 1][x]) || localArr[y + 1][x] == "r") {
+            counter++;
+            if (localArr[y + 1][x] == "r") {
+                return;
+            }
+            
+            if (counter == 1) {
+                minStepAround = +localArr[y + 1][x];
+                truthPoint = new Point(x, y + 1);
+            }
+            
+            if (minStepAround >= localArr[y + 1][x]) {
+                minStepAround = +localArr[y + 1][x];
+                truthPoint = new Point(x, y + 1);
+            }
+        }
+        // Лево
+        if (!fieldObjects.hasOwnProperty(localArr[y][x - 1]) || localArr[y][x - 1] == "r") {
+            counter++;
+            if (localArr[y][x - 1] == "r") {
+                return;
+            }
+            
+            if (counter == 1) {
+                minStepAround = +localArr[y][x - 1];
+                truthPoint = new Point(x - 1, y);
+            }
+            if (minStepAround > localArr[y][x - 1]) {
+                minStepAround = +localArr[y][x - 1];
+                truthPoint = new Point(x - 1, y);
+            }
+        }
+        // Право
+        if (!fieldObjects.hasOwnProperty(localArr[y][x + 1]) || localArr[y][x + 1] == "r") {
+            counter++;
+            if (localArr[y][x + 1] == "r") {
+                return;
+            }
+
+            if (counter == 1) {
+                minStepAround = +localArr[y][x + 1];
+                truthPoint = new Point(x + 1, y);
+            }
+            
+            if (minStepAround > localArr[y][x + 1]) {
+                minStepAround = +localArr[y][x + 1];
+                truthPoint = new Point(x + 1, y);
+            }
+        }
+        
+        truthPoint || dispatchEvent(this.diedEvent);
+        
+        // if (entryPoint != "END") {
+            arr.unshift(truthPoint);
+            // }
+        }
+        //Рекурсивное повторение предыдущих шагов восстановления пути при реализации волнового алгоритма 
     foundWayAll(localArr, arr) {
         const firstPoint = arr[0];
-        const d = localArr[firstPoint.y][firstPoint.x];
+
+        let d;
+
+        if (firstPoint) {
+            d = localArr[firstPoint.y][firstPoint.x];
+        } else {
+            debugger;
+        }
 
         const currentPoint = this.foundWayAround(localArr, firstPoint.x, firstPoint.y, d - 1);
 
@@ -341,9 +411,13 @@ export class Field {
     }
     //Проверка следующей ячейки на значение d-1, где d- значение в текущей ячейке
     foundWayAround(localArr, x, y, d = -1) {
+        if (isNaN(d)) {
+            // dispatchEvent(this.diedEvent);
+        }
+        
         // Верх
         if (!fieldObjects.hasOwnProperty(localArr[y - 1][x])) {
-            if (d != 0) {
+            if (d != -1) {
                 if (localArr[y - 1][x] == d) {
                     return new Point(x, y - 1);
                 }
@@ -368,7 +442,8 @@ export class Field {
                     return new Point(x - 1, y);
                 }
             } else {
-                return new Point(x - 1, y);
+               return new Point(x - 1, y);
+            //    return new Point(x , y);
             }
         }
         // Право
