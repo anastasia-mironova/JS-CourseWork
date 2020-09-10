@@ -23,6 +23,9 @@
 }
 
 .main-grid_playground {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   grid-area: playground;
   background-color: aquamarine;
   background: url(./img/pirate.jpg);
