@@ -10,7 +10,7 @@
   grid-template-areas: "menu playground";
   grid-gap: 10px;
   padding: 10px;
-  background-color: purple;
+  background-color: rgba(128, 0, 128, 0.74);
 }
 
 .main-grid_menu {
@@ -18,7 +18,8 @@
   flex-direction: column;
   justify-content: space-between;
   grid-area: menu;
-  background-color: darkblue;
+  border-radius: 20px;
+  background-color: rgba(14, 14, 141, 0.541);
 }
 
 .main-grid_playground {
@@ -69,7 +70,7 @@ body {
   transition-timing-function: ease-in-out;
   font-size: 20pt;
   display: block;
-  background-color: orangered;
+  background-color: rgba(207, 67, 16, 0.61);
   border: #F0F8FF solid 1px;
   margin: 8px 8px;
   padding: 12px;
@@ -79,7 +80,7 @@ body {
 }
 
 .menu-component_item:hover {
-  background-color: lightcoral;
+  background-color: rgba(230, 84, 84, 0.63);
 }
 
 .menu-preview {
@@ -129,14 +130,3 @@ body {
   padding-left: 30px;
   padding-right: 30px;
 }
-
-/* 
-.marsianin {
-  background-image: url('./img/rogue.png');
-  position: absolute;
-  top: 200px;
-  left: 700px;
-  width: 200px;
-  height: 200px;
-  background-color: blue;
-} */
