@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css?family=Amatic+SC:400,700&subset=cyrillic');
-
 * {
   font-family: 'Amatic SC', cursive;
 }
@@ -8,8 +7,7 @@
   display: grid;
   grid-template-columns: 250px auto;
   grid-template-rows: calc(100vh - 20px);
-  grid-template-areas: 
-    "menu playground";
+  grid-template-areas: "menu playground";
   grid-gap: 10px;
   padding: 10px;
   background-color: purple;
@@ -45,6 +43,7 @@ body {
   margin: 0px;
   padding: 0px;
 }
+
 .score-component_item {
   font-size: 20pt;
   display: block;
@@ -63,6 +62,7 @@ body {
   margin: 0px;
   padding: 0px;
 }
+
 .menu-component_item {
   transition: all;
   transition-duration: .1s;
@@ -95,7 +95,7 @@ body {
   text-shadow: 2px 2px 0px rgba(241, 124, 204, 1);
 }
 
-.disabled { 
+.disabled {
   display: none;
 }
 
@@ -103,7 +103,6 @@ body {
   font-size: 24px;
   font-weight: bold;
   margin: -30px auto 15px;
-  
 }
 
 .records-table th {
@@ -130,3 +129,14 @@ body {
   padding-left: 30px;
   padding-right: 30px;
 }
+
+/* 
+.marsianin {
+  background-image: url('./img/rogue.png');
+  position: absolute;
+  top: 200px;
+  left: 700px;
+  width: 200px;
+  height: 200px;
+  background-color: blue;
+} */

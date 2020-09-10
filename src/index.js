@@ -9,14 +9,14 @@ import { cloneDeep } from 'lodash';
 
 
 const initialLevel = [
-["w", "w", "w", "w", "w", "w", "w", "w"],
-["w", "h", "e", "w", "e", "e", "e", "w"],
-["w", "w", "e", "e", "e", "w", "e", "w"],
-["w", "e", "e", "w", "w", "w", "e", "w"],
-["w", "e", "r", "w", "t", "e", "e", "w"],
-["w", "w", "e", "w", "w", "w", "e", "w"],
-["w", "t", "e", "e", "e", "e", "e", "w"],
-["w", "w", "w", "w", "w", "w", "w", "w"]];
+    ["w", "w", "w", "w", "w", "w", "w", "w"],
+    ["w", "h", "e", "w", "e", "e", "e", "w"],
+    ["w", "w", "e", "e", "e", "w", "e", "w"],
+    ["w", "e", "e", "w", "w", "w", "e", "w"],
+    ["w", "e", "r", "w", "t", "e", "e", "w"],
+    ["w", "w", "e", "w", "w", "w", "e", "w"],
+    ["w", "t", "e", "e", "e", "e", "e", "w"],
+    ["w", "w", "w", "w", "w", "w", "w", "w"]];
 
 const levels = [
     //1
@@ -77,14 +77,14 @@ const levels = [
     ["w", "t", "e", "e", "e", "e", "e", "w"],
     ["w", "w", "w", "w", "w", "w", "w", "w"]],
     //7
-    [["w", "w", "w", "w", "w","w"],
-    ["w", "e", "t", "e", "e","w"],
-    ["w", "e", "e", "e", "e","w"],
-    ["w", "e", "r", "e", "e","w"],
-    ["w", "t", "e", "e", "t","w"],
-    ["w", "e", "e", "e", "e","w"],
-    ["w", "h", "e", "e", "e","w"],
-    ["w", "w", "w", "w", "w","w"]],
+    [["w", "w", "w", "w", "w", "w"],
+    ["w", "e", "t", "e", "e", "w"],
+    ["w", "e", "e", "e", "e", "w"],
+    ["w", "e", "r", "e", "e", "w"],
+    ["w", "t", "e", "e", "t", "w"],
+    ["w", "e", "e", "e", "e", "w"],
+    ["w", "h", "e", "e", "e", "w"],
+    ["w", "w", "w", "w", "w", "w"]],
     //8
     [["w", "w", "w", "w", "w", "w", "w", "w"],
     ["w", "e", "e", "t", "e", "e", "t", "w"],
@@ -95,16 +95,16 @@ const levels = [
     ["w", "e", "e", "w", "w", "e", "e", "w"],
     ["w", "e", "e", "e", "e", "e", "e", "w"],
     ["w", "t", "e", "e", "e", "e", "h", "w"],
-    ["w", "w", "w", "w", "w", "w", "w","w"]],
+    ["w", "w", "w", "w", "w", "w", "w", "w"]],
     //9
-    [["w", "w", "w", "w", "w","w"],
-    ["w", "t", "e", "r", "t","w"],
-    ["w", "e", "e", "e", "e","w"],
-    ["w", "e", "e", "e", "e","w"],
-    ["w", "e", "w", "h", "e","w"],
-    ["w", "e", "w", "e", "e","w"],
-    ["w", "e", "w", "e", "e","w"],
-    ["w", "w", "w", "w", "w","w"]],
+    [["w", "w", "w", "w", "w", "w"],
+    ["w", "t", "e", "r", "t", "w"],
+    ["w", "e", "e", "e", "e", "w"],
+    ["w", "e", "e", "e", "e", "w"],
+    ["w", "e", "w", "h", "e", "w"],
+    ["w", "e", "w", "e", "e", "w"],
+    ["w", "e", "w", "e", "e", "w"],
+    ["w", "w", "w", "w", "w", "w"]],
     //10
     [["w", "w", "w", "w", "w", "w", "w", "w"],
     ["w", "e", "e", "w", "e", "e", "t", "w"],
@@ -123,7 +123,7 @@ let levelField;
 let levelFieldStoper;
 
 let pauseEvent = new Event("pauseevent");
-addEventListener("pauseevent", function() {
+addEventListener("pauseevent", function () {
     console.log("Настало время сделать паузу");
 });
 
@@ -131,7 +131,7 @@ let gameStartEvent = new Event("startgame");
 addEventListener("startgame", function () {
     if (levelField) {
         finalizeField(levelField);
-        
+
     }
 
     initField(cloneDeep(initialLevel));
@@ -144,14 +144,14 @@ addEventListener("startgame", function () {
 
 let recordsEvent = new Event("recordsClicked");
 addEventListener("recordsClicked", function () {
- 
+
 
     const table = document.querySelector("#table-content");
-    
+
 
     const tableElements = table.querySelectorAll(".el");
 
-   
+
 
     const records = getRecords();
 
@@ -182,8 +182,8 @@ addEventListener("arbidol", function () {
 
     const currentLevel = +score.level;
 
-    if (currentLevel == levels.length ) {
-        levelField.renderField(); 
+    if (currentLevel == levels.length) {
+        levelField.renderField();
         endGame();
     }
 
@@ -193,13 +193,13 @@ addEventListener("arbidol", function () {
 
     setTimeout(function () {
         levelField.renderField();
-    }, 1);
+    }, 300);
 });
 
 
 
 function initField(level) {
-    
+
     levelField = new Field(level, score, myEvent, diedEvent);
     addEventListener("keydown", levelField.hunterController);
 
@@ -217,7 +217,7 @@ function finalizeField(field) {
 let diedEvent = new Event("hunterDied");
 addEventListener("hunterDied", function () {
     hunterDied();
-    
+
 })
 
 function hunterDied() {
@@ -227,7 +227,7 @@ function hunterDied() {
     updateRecords(name, score.score);
 
     finalizeField(levelField);
-     
+
     score.level = 1;
     score.score = 0;
     levelField.paused = !levelField.paused;
@@ -299,34 +299,34 @@ document.querySelector(".records_exit").addEventListener("click", function () {
     game.classList.add("disabled");
 });
 
-document.querySelector(".pause").addEventListener("click", function() {
+document.querySelector(".pause").addEventListener("click", function () {
     levelField.paused = !levelField.paused;
 });
 
-document.querySelector(".exit").addEventListener("click", function(){
+document.querySelector(".exit").addEventListener("click", function () {
     console.log("click exit");
-        const preview = document.querySelector('.preview');
-        const records = document.querySelector('.records-el');
-        const game = document.querySelector('.game');
-        
-        preview.classList.remove("disabled");
-        records.classList.add("disabled");
-        game.classList.add("disabled");
-        
+    const preview = document.querySelector('.preview');
+    const records = document.querySelector('.records-el');
+    const game = document.querySelector('.game');
+
+    preview.classList.remove("disabled");
+    records.classList.add("disabled");
+    game.classList.add("disabled");
+
     levelField.paused = !levelField.paused;
 });
 
 function endGame() {
-    
+
     alert("This is the end");
     const name = prompt("Ваше имя", " ");
 
     updateRecords(name, score.score);
 
     finalizeField(levelField);
-    
-   
-    
+
+
+
     const preview = document.querySelector('.preview');
     const records = document.querySelector('.records-el');
     const game = document.querySelector('.game');

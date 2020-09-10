@@ -33,6 +33,7 @@ export class Field {
         this.hunterController = this.hunterController.bind(this);
         this.rougueController = this.rougueController.bind(this);
         this.counter = 0;
+        this.rogueImage = document.querySelector(".marsianin");
 
         this.testSearch();
     }
@@ -68,6 +69,7 @@ export class Field {
 
     //Отрисовка элементов игрового поля
     renderField() {
+
         this.ctx.beginPath();
         for (let col = 0; col < this.cols; col++) {
 
@@ -88,9 +90,22 @@ export class Field {
 
                 if (fieldObjects[item]) {
                     this.ctx.fillStyle = fieldObjects[item].color;
+
+                    let img = new Image();
+                    img.onload = function () { // Событие которое будет исполнено в момент когда изображение будет загружено
+                        console.log("loaded");
+                        self.ctx.drawImage(img, colIndex * self.cellSize, rowIndex * self.cellSize, self.cellSize, self.cellSize);
+                    }
+                    // Загружаем файл изображения
+                    img.src = fieldObjects[item].src;
+
+
+
                 } else {
                     this.ctx.fillStyle = "#F0F8FF";
                 }
+                const self = this;
+                //  console.log("hfjf");
 
                 this.ctx.fillRect(colIndex * this.cellSize, rowIndex * this.cellSize, this.cellSize, this.cellSize);
             });
@@ -191,7 +206,7 @@ export class Field {
             }
 
 
-        }, 1000);
+        }, 800);
 
         return stoper;
     }
@@ -203,22 +218,22 @@ export class Field {
         switch (e.keyCode) {
             //up
             case 38:
-                
+
                 this.forwardTo(this.hunter.x, this.hunter.y, "up");
                 break;
             //down
             case 40:
-               
+
                 this.forwardTo(this.hunter.x, this.hunter.y, "down");
                 break;
             //left
             case 37:
-               
+
                 this.forwardTo(this.hunter.x, this.hunter.y, "left");
                 break;
             //right
             case 39:
-                
+
                 this.forwardTo(this.hunter.x, this.hunter.y, "right");
                 break;
         }
@@ -329,7 +344,7 @@ export class Field {
             if (localArr[y - 1][x] == "r") {
                 return;
             }
-            
+
             minStepAround = +localArr[y - 1][x];
             truthPoint = new Point(x, y - 1);
         }
@@ -339,12 +354,12 @@ export class Field {
             if (localArr[y + 1][x] == "r") {
                 return;
             }
-            
+
             if (counter == 1) {
                 minStepAround = +localArr[y + 1][x];
                 truthPoint = new Point(x, y + 1);
             }
-            
+
             if (minStepAround >= localArr[y + 1][x]) {
                 minStepAround = +localArr[y + 1][x];
                 truthPoint = new Point(x, y + 1);
@@ -356,7 +371,7 @@ export class Field {
             if (localArr[y][x - 1] == "r") {
                 return;
             }
-            
+
             if (counter == 1) {
                 minStepAround = +localArr[y][x - 1];
                 truthPoint = new Point(x - 1, y);
@@ -377,20 +392,20 @@ export class Field {
                 minStepAround = +localArr[y][x + 1];
                 truthPoint = new Point(x + 1, y);
             }
-            
+
             if (minStepAround > localArr[y][x + 1]) {
                 minStepAround = +localArr[y][x + 1];
                 truthPoint = new Point(x + 1, y);
             }
         }
-        
+
         truthPoint || dispatchEvent(this.diedEvent);
-        
+
         // if (entryPoint != "END") {
-            arr.unshift(truthPoint);
-            // }
-        }
-        //Рекурсивное повторение предыдущих шагов восстановления пути при реализации волнового алгоритма 
+        arr.unshift(truthPoint);
+        // }
+    }
+    //Рекурсивное повторение предыдущих шагов восстановления пути при реализации волнового алгоритма 
     foundWayAll(localArr, arr) {
         const firstPoint = arr[0];
 
@@ -414,7 +429,7 @@ export class Field {
         if (isNaN(d)) {
             // dispatchEvent(this.diedEvent);
         }
-        
+
         // Верх
         if (!fieldObjects.hasOwnProperty(localArr[y - 1][x])) {
             if (d != -1) {
@@ -442,8 +457,8 @@ export class Field {
                     return new Point(x - 1, y);
                 }
             } else {
-               return new Point(x - 1, y);
-            //    return new Point(x , y);
+                return new Point(x - 1, y);
+                //    return new Point(x , y);
             }
         }
         // Право
@@ -469,5 +484,5 @@ export class Field {
         }
     }
 
-    
+
 }

@@ -1,18 +1,25 @@
 const fieldObjects = {
     "w": {
         "color": "#C0C0C0",
+        "src": ""
+        // "src": "img/wall.png"
     },
     "h": {
         "color": "#8B0000",
+        "src": "img/hunt.png"
     },
     "t": {
         "color": "#FFD700",
+        "src": "img/tres.png"
     },
     "r": {
-        "color": "#1A1A1A",
+        "color": "#ff0066",
+        "src": "img/rogue.png"
+
     },
     "e": {
-        "color": "#BADA55"
+        "color": "#d9dcff",
+        "src": ""
     }
 }
 
@@ -35,4 +42,4 @@ const direction = {
     }
 }
 
-export default {fieldObjects, direction};
+export default { fieldObjects, direction };
