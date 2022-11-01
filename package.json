@@ -13,7 +13,7 @@
     "css-loader": "^1.0.1",
     "file-loader": "^2.0.0",
     "gh-pages": "^2.2.0",
-    "gulp": "^3.9.1",
+    "gulp": "^4.0.2",
     "gulp-autoprefixer": "^5.0.0",
     "gulp-babel": "^7.0.1",
     "gulp-watch": "^5.0.1",
